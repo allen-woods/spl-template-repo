@@ -61,7 +61,7 @@ From here, you can delete the init script from your repo directory and freely ed
 
 ## Advanced Installation
 
-GitHub provides `.gitignore` templates for many system programming languages, but the `gh` CLI utility currently does not allow mixed use of both the `--gitignore` and `--template` flags.
+GitHub provides `.gitignore` templates for many SPLs, but the `gh` CLI utility currently does not allow mixed use of both the `--gitignore` and `--template` flags.
 
 To enable the `.gitignore` template for the supported languages in [Table 1.1](#supported-spls) above, we can simply provide the language name as the optional third argument to the init script, as follows:
 
