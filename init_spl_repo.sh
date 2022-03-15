@@ -27,7 +27,7 @@ function init_apache_license {
         sed "s|^[\ ]\{${#margin}\}\([Copyright]\{9\}\).*$|\1|"
       )
       if [ "${copyright}" = "Copyright" ]; then
-        echo "${margin}${copyright} ${copyright_year} ${copyright_holder}" >> LICENSE-APACHE
+        echo "${margin}${copyright} (c) ${copyright_year} ${copyright_holder}" >> LICENSE-APACHE
       else
         echo "${line}" >> LICENSE-APACHE
       fi
@@ -76,7 +76,7 @@ function init_mit_license {
         )
 
         if [ "${copyright}" = "Copyright" ]; then
-          echo "${copyright} ${copyright_year} ${copyright_holder}" >> LICENSE-MIT
+          echo "${copyright} (c) ${copyright_year} ${copyright_holder}" >> LICENSE-MIT
         else
           if [ "${line}" != "${chk_start}" ]; then
             if [ "${line}" != "${chk_end}" ]; then
