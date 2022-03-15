@@ -62,7 +62,8 @@ From here, you can freely edit the generated README to contain relevant informat
 To supply a `gitignore` template using the `--gitignore` flag:
 
 ```shell
-# Example Go project for reference only, consult table above for supported languages.
+# Example Go project for reference only.
+# consult table above for supported languages.
 
 gh repo create example-go-project \
   --clone \
