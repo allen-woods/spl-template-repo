@@ -92,8 +92,7 @@ function init_mit_license {
 function init_spl_readme {
   if [ -f "LICENSE-APACHE" ] && [ -f "LICENSE-MIT" ]; then
     if [ -f "README.md" ]; then
-      echo "README.md already exists!"
-      return 1
+      rm -f README.md
     fi
 
     printf '%s\n' \
@@ -114,8 +113,8 @@ function init_spl_readme {
 
 function add_commit_push_spl_repo_init {
   git add LICENSE-APACHE LICENSE-MIT README.md
-  git commit -m "Added licenses and readme."
-  git push --set-upstream origin main
+  git commit -m "Added licenses and updated readme."
+  git push --set-upstream origin $( git config --get init.defaultBranch )
 }
 
 function init_spl_repo {
