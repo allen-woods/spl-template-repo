@@ -115,7 +115,7 @@ function init_spl_readme {
 function add_commit_push_spl_repo_init {
   git add LICENSE-APACHE LICENSE-MIT README.md
   git commit -m "Added licenses and readme."
-  git push
+  git push --set-upstream origin main
 }
 
 function init_spl_repo {
