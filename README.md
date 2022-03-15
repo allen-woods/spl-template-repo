@@ -1,6 +1,6 @@
 # System Programming Language Template Repo
 
-When developing a project that uses a system programming language, it is common practice to provide both an Apache 2.0 license and an MIT license on an open-source repository.
+When developing a project that uses a system programming language (SPL), it is common practice to provide both an Apache 2.0 license and an MIT license on an open-source repository.
 
 Currently, there is no facility for adding multiple licenses to a repository using GitHub's `gh` CLI utility.
 
@@ -9,6 +9,8 @@ This repository is an example of how we can use the `--template` flag provided b
 ## Compatible Languages
 
 As of the date of the latest commit to this repo, the appropriate languages to use with this template repository are as follows:
+
+### Supported SPLs
 
 | Language | Gitignore String |
 | :------- | :--------------- |
@@ -55,20 +57,24 @@ This script will automatically perform the following steps:
 5. Trigger a replacement of this README file in favor of a new one containing the standard **License** clause.
 6. Add, commit, and push generated files using the `--set-upstream` flag.
 
-From here, you can freely edit the generated README to contain relevant information about your project above the **License** header.
+From here, you can delete the init script from your repo directory and freely edit the generated README to contain relevant information about your project above the **License** header.
 
 ## Advanced Installation
 
-To supply a `gitignore` template using the `--gitignore` flag:
+GitHub provides `.gitignore` templates for many system programming languages, but the `gh` CLI utility currently does not allow mixed use of both the `--gitignore` and `--template` flags.
+
+To enable the `.gitignore` template for the supported languages in [Table 1.1](#supported-spls) above, we can simply provide the language name as the optional third argument to the init script, as follows:
 
 ```shell
-# Example Go project for reference only.
-# consult table above for supported languages.
+# Consult table 1.1 for supported SPLs.
 
-gh repo create example-go-project \
+gh repo create <new_repo_name> \
   --clone \
-  --description="A project written in Go." \
-  --gitignore="Go" \
+  --description="Your description here." \
   --public \
   --template "allen-woods/spl-template-repo"
+
+cd <new_repo_name>
+
+./init_spl_repo.sh <First> <Last> <spl>
 ```

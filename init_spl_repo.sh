@@ -4,7 +4,7 @@ function init_apache_license {
     printf '%s\n' \
     "error: you must pass a legal first and last name as arguments." \
     "-----" \
-    "usage: ./init_apache_license.sh <First> <Last>"
+    "usage: init_apache_license <First> <Last>"
     return 1
   fi
 
@@ -40,7 +40,7 @@ function init_mit_license {
     printf '%s\n' \
     "error: you must pass a legal first and last name as arguments." \
     "-----" \
-    "usage: ./init_mit_license.sh <First> <Last>"
+    "usage: init_mit_license <First> <Last>"
     return 1
   fi
 
@@ -111,6 +111,50 @@ function init_spl_readme {
   fi
 }
 
+function fetch_gitignore_template {
+  local spl=
+
+  case $( echo $1 | tr '[:upper:]' '[:lower:]' ) in
+    ada)
+      spl="Ada"
+      ;;
+    c)
+      spl="C"
+      ;;
+    c++|cpp|cxx|cc)
+      spl="C++"
+      ;;
+    d)
+      spl="D"
+      ;;
+    go|golang)
+      spl="Go"
+      ;;
+    nim)
+      spl="Nim"
+      ;;
+    rust|rs)
+      spl="Rust"
+      ;;
+    swift)
+      spl="Swift"
+      ;;
+    *)
+      echo "error: you must pass a system programming language name."
+      echo "-----"
+      echo "usage: fetch_gitignore_template <spl_name>"
+      echo -e "\tspl_name = \"Ada\", \"C\", \"C++\", \"D\", \"Go\", \"Nim\", \"Rust\", or \"Swift\"."
+      return 1
+      ;;
+  esac
+
+  curl \
+    --silent \
+    -X GET \
+    -H 'Content-Type: text/html' \
+    "https://raw.githubusercontent.com/github/gitignore/main/${spl}.gitignore" > .gitignore
+}
+
 function add_commit_push_spl_repo_init {
   git add LICENSE-APACHE LICENSE-MIT README.md
   git commit -m "Added licenses and updated readme."
@@ -121,6 +165,7 @@ function init_spl_repo {
   init_apache_license $@
   init_mit_license $@
   init_spl_readme
+  [ $? -eq 0 ] && [ "${3}" != "" ] && fetch_gitignore_template $3
   [ $? -eq 0 ] && add_commit_push_spl_repo_init
 }
 
