@@ -57,7 +57,12 @@ This script will automatically perform the following steps:
 5. Trigger a replacement of this README file in favor of a new one containing the standard **License** clause.
 6. Add, commit, and push generated files using the `--set-upstream` flag.
 
-From here, you can delete the init script from your repo directory and freely edit the generated README to contain relevant information about your project above the **License** header.
+## Next Steps
+
+From here, you can:
+
+- Delete `init_spl_repo.sh` from your local repo directory.
+- Add information relevant to your project above the **License** header in the README.
 
 ## Advanced Installation
 
