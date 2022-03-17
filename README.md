@@ -12,16 +12,16 @@ As of the date of the latest commit to this repo, the appropriate languages to u
 
 ### Supported SPLs
 
-| Language | Gitignore String |
-| :------- | :--------------- |
-| Ada      | "Ada"            |
-| C        | "C"              |
-| C++      | "C++"            |
-| D        | "D"              |
-| Go       | "Go"             |
-| Nim      | "Nim"            |
-| Rust     | "Rust"           |
-| Swift    | "Swift"          |
+| Language | Gitignore String | SPL args                        |
+| :------- | :--------------- | :------------------------------ |
+| Ada      | "Ada"            | "ada"                           |
+| C        | "C"              | "c"                             |
+| C++      | "C++"            | "c++"<br>"cpp"<br>"cxx"<br>"cc" |
+| D        | "D"              | "d"                             |
+| Go       | "Go"             | "go"<br>"golang"                |
+| Nim      | "Nim"            | "nim"                           |
+| Rust     | "Rust"           | "rust"<br>"rs"                  |
+| Swift    | "Swift"          | "swift"<br>"sw"                 |
 
 Source: [System programming language](https://en.wikipedia.org/wiki/System_programming_language) - Wikipedia
 
@@ -40,10 +40,21 @@ gh repo create <new_repo_name> \
 Once the repository has been cloned locally, `cd` into it and run the script:
 
 ```shell
-# You must pass your first and last name as arguments.
-
-./init_spl_repo.sh <First> <Last>
+chmod +x ./init_spl_repo.sh
+./init_spl_repo.sh
 ```
+
+You will be presented with a usage message detailing how to run the script successfully&mdash;see [here](#sample-script-usage-message) for an example.
+
+### Example SPL Project Script Flags
+
+```shell
+./init_spl_repo.sh \
+  --license-type="apache,mit" \
+  --license-holder="Your Name"
+```
+
+### Script Outline
 
 This script will automatically perform the following steps:
 
@@ -57,7 +68,7 @@ This script will automatically perform the following steps:
 5. Trigger a replacement of this README file in favor of a new one containing the standard **License** clause.
 6. Add, commit, and push generated files using the `--set-upstream` flag.
 
-## Next Steps
+### Next Steps
 
 From here, you can:
 
@@ -68,7 +79,7 @@ From here, you can:
 
 GitHub provides `.gitignore` templates for many SPLs, but the `gh` CLI utility currently does not allow mixed use of both the `--gitignore` and `--template` flags.
 
-To enable the `.gitignore` template for the supported languages in [Table 1.1](#supported-spls) above, we can simply provide the language name as the optional third argument to the init script, as follows:
+To enable the `.gitignore` template for the supported languages in [Table 1.1](#supported-spls) above, we can simply provide the gitignore type via the optional `--gitignore` flag, as follows:
 
 ```shell
 # Consult table 1.1 for supported SPLs.
@@ -81,5 +92,71 @@ gh repo create <new_repo_name> \
 
 cd <new_repo_name>
 
-./init_spl_repo.sh <First> <Last> <spl>
+./init_spl_repo.sh \
+  --license-type="apache,mit" \
+  --license-holder="Your Name" \
+  --gitignore="rs" # Let's use Rust!
+```
+
+## Sample Script Usage Message
+
+```shell
+Usage:  ./init_spl_repo.sh \
+        --license-type="comma,separated,list" \
+        --license-holder="Holder's Name" [\]
+        [--gitignore="SPL"]
+
+Available License / License Header Types:
+
+        agpl3
+        agpl3-header
+        apache
+        apache-header
+        bsd2
+        bsd3
+        cc0
+        cc0-header
+        cc_by
+        cc_by-header
+        cc_by_nc
+        cc_by_nc-header
+        cc_by_nc_nd
+        cc_by_nc_nd-header
+        cc_by_nc_sa
+        cc_by_nc_sa-header
+        cc_by_nd
+        cc_by_nd-header
+        cc_by_sa
+        cc_by_sa-header
+        cddl
+        epl
+        gpl2
+        gpl3
+        gpl3-header
+        isc
+        lgpl
+        mit
+        mpl
+        mpl-header
+        unlicense
+        wtfpl
+        wtfpl-header
+        wtfpl-header-warranty
+        x11
+        zlib
+
+Option: ./init_spl_repo.sh \
+        ... [\]
+        [--gitignore="SPL"]
+
+Gitignore Support for System Programming Languages (SPLs) - Optional
+
+        Ada
+        C
+        C++
+        D
+        Go
+        Nim
+        Rust
+        Swift
 ```
