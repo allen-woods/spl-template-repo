@@ -44,7 +44,7 @@ chmod +x ./init_spl_repo.sh
 ./init_spl_repo.sh
 ```
 
-You will be presented with a usage message detailing how to run the script successfully&mdash;see [here](#sample-script-usage-message) for an example.
+You will be presented with a usage message detailing how to run the script successfully&mdash;see [here](#🔬-sample-script-usage-message) for an example.
 
 ### 🔍 Example SPL Project Script Flags
 
