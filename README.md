@@ -1,4 +1,4 @@
-# System Programming Language Template Repo
+# ✨ System Programming Language Template Repo
 
 When developing a project that uses a system programming language (SPL), it is common practice to provide both an Apache 2.0 license and an MIT license on an open-source repository.
 
@@ -6,11 +6,11 @@ Currently, there is no facility for adding multiple licenses to a repository usi
 
 This repository is an example of how we can use the `--template` flag provided by `gh` in combination with shell script to achieve the desired result.
 
-## Compatible Languages
+## ✅ Compatible Languages
 
 As of the date of the latest commit to this repo, the appropriate languages to use with this template repository are as follows:
 
-### Supported SPLs
+### 🧑‍🔬 Supported SPLs
 
 | Language | Gitignore String | SPL args                        |
 | :------- | :--------------- | :------------------------------ |
@@ -25,7 +25,7 @@ As of the date of the latest commit to this repo, the appropriate languages to u
 
 Source: [System programming language](https://en.wikipedia.org/wiki/System_programming_language) - Wikipedia
 
-## Basic Installation
+## 🧸 Basic Installation
 
 At minimum, run the following locally from your work $PATH:
 
@@ -46,7 +46,7 @@ chmod +x ./init_spl_repo.sh
 
 You will be presented with a usage message detailing how to run the script successfully&mdash;see [here](#sample-script-usage-message) for an example.
 
-### Example SPL Project Script Flags
+### 🔍 Example SPL Project Script Flags
 
 ```shell
 ./init_spl_repo.sh \
@@ -54,28 +54,47 @@ You will be presented with a usage message detailing how to run the script succe
   --license-holder="Your Name"
 ```
 
-### Script Outline
+### 📖 Script Outline
 
-This script will automatically perform the following steps:
+This script automatically performs the following steps:
 
-1. Request the Apache-2.0 license as plaintext via `curl`.
-2. Parse the following data into the Apache-2.0 license:
-   - Your first name
-   - Your last name
-   - The current year via `date`
-3. Request the MIT license as plaintext via `curl`.
-4. Parse the same information from step 2 into the MIT license.
-5. Trigger a replacement of this README file in favor of a new one containing the standard **License** clause.
-6. Add, commit, and push generated files using the `--set-upstream` flag.
+1. Request root of `licenses/license-templates` from `api.github.com` via `curl`.
+   - Output `JSON` in multi-line format using `jq`.
+   - Iterate over field/value pairs using `awk`.
+   - Parse `templates` string value contained in the `path` field to locate `JSON` obect.
+   - Parse tree `https` address value contained in the `url` field.
+2. Request tree given by `http` address parsed in **1a**.
+   - Same as **1a**.
+   - Same as **1b**.
+   - Parse basename values of licenses contained in the `path` fields of their `JSON` objects.
+   - Parse blob `https` address values contained in the `url` fields of license `JSON` objects.
+   - Map each given basename to its corresponding `https` address.
+3. Iterate across mapped basenames until user requested license is found.
+4. Request blob given by corresponding `https` address.
+   - Same as **1a**.
+   - Same as **1b**.
+   - Parse and decode `base64` encoded string contained in the `content` field.
+   - Interpolate incoming arguments and `date` information into the decoded license body.
+   - Echo the license to a persisted file under a newly created `LICENSES` folder.
+5. Check for the presence of an `apache` and an `mit` license.
+   - Conditionally remove any pre-existing `README.md` file, if one is found.
+   - Conditionally generate a `README.md` file containing a dual-license **License** clause.
+6. Use the `gitignore` argument's value to request a file from `raw.githubusercontent.com`.
+   - Persist the gitignore file to the root path of the repo.
+7. Process the files with `git`.
+   - Add the created files (`git add`).
+   - Commit the files with message `Initializaed repo.`.
+   - Push the commit using the `--set-upstream` flag.
+   - Upstream automatically conforms to `init.defaultBranch`.
 
-### Next Steps
+### 👍 Next Steps
 
 From here, you can:
 
 - Delete `init_spl_repo.sh` from your local repo directory.
 - Add information relevant to your project above the **License** header in the README.
 
-## Advanced Installation
+## ⚡️ Advanced Installation
 
 GitHub provides `.gitignore` templates for many SPLs, but the `gh` CLI utility currently does not allow mixed use of both the `--gitignore` and `--template` flags.
 
@@ -98,7 +117,7 @@ cd <new_repo_name>
   --gitignore="rs" # Let's use Rust!
 ```
 
-## Sample Script Usage Message
+## 🔬 Sample Script Usage Message
 
 ```shell
 Usage:  ./init_spl_repo.sh \

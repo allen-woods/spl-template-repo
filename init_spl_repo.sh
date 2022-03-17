@@ -1,5 +1,6 @@
 #!/bin/sh
 function generate_license () {
+  local project=
   local license_holder=
   local license_type=
 
@@ -76,6 +77,14 @@ function generate_license () {
   )
 
   for arg in "$@"; do
+    if [[ ! -z "$( echo "${arg}" | grep 'project' )" ]]; then
+      project="$( \
+        echo "${arg}" | \
+        cut -d '=' -f 2 | \
+        sed 's|[ ]\{1\}|\\&|g; s|[\\]\{2,\}||g;' \
+      )"
+    fi
+
     if [[ ! -z "$( echo "${arg}" | grep 'license-holder' )" ]]; then
       license_holder="$( \
         echo "${arg}" | \
@@ -94,9 +103,12 @@ function generate_license () {
     fi
   done
 
-  if [ -z "${license_holder}" ] || [ -z "${license_type}" ]; then
+  if [ -z "${project}" ] || \
+  [ -z "${license_holder}" ] || \
+  [ -z "${license_type}" ]; then
     printf '%-8s%-2s\n' \
     "Usage:" "./init_spl_repo.sh \\" \
+    " " "--project=\"Project Name\" \\" \
     " " "--license-type=\"comma,separated,list\" \\" \
     " " "--license-holder=\"Holder's Name\" [\\]" \
     " " "[--gitignore=\"SPL\"]"
@@ -109,7 +121,6 @@ function generate_license () {
     echo ""
 
     fetch_gitignore_template
-
     return 0
   fi
 
@@ -150,6 +161,7 @@ function generate_license () {
   fi
 
   echo "${license_template}" | \
+  sed 's|[{]\{2\}[ ]\{1\}[project]\{7\}[ ]\{1\}[}]\{2\}|'"${project}"'|g' | \
   sed 's|[{]\{2\}[ ]\{1\}[year]\{4\}[ ]\{1\}[}]\{2\}|'"$( date '+%Y' )"'|g' | \
   sed 's|[{]\{2\}[ ]\{1\}[organizt]\{12\}[ ]\{1\}[}]\{2\}|'"${license_holder}"'|g' > LICENSES/LICENSE-"$( \
     echo "${license_type}" | \
@@ -253,7 +265,7 @@ function add_commit_push_spl_repo_init {
   git add LICENSES README.md
   [ -f .gitignore ] && git add .gitignore
   git commit -m "Initialized repo."
-  git push
+  git push --set-upstream origin $( git config --get init.defaultBranch )
 }
 
 function init_spl_repo {
@@ -302,16 +314,17 @@ function init_spl_repo {
   [ -z "${licenses}" ]; then
     # Show error message (no args passed).
     generate_license
+    return 0
   fi
 
   for license in $licenses; do
     generate_license \
+    --project="${project_name}" \
     --license-type="${license}" \
     --license-holder="${copyright_holder}"
   done
 
   init_spl_readme
-
   if [ $? -eq 0 ] && [[ ! -z "${gitignore}" ]]; then
     fetch_gitignore_template --gitignore="${gitignore}"
   fi
