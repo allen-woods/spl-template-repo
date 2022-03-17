@@ -56,6 +56,8 @@ You will be presented with a usage message detailing how to run the script succe
 
 ### 📖 Script Outline
 
+GitHub does provide a short path to an official list of licenses that does not include any software distribution header files. However, for the sake of flexibility and user preference, the script in this repo takes a more thorough approach to fetching its data and makes all license-related files available.
+
 This script automatically performs the following steps:
 
 1. Request root of `licenses/license-templates` from `api.github.com` via `curl`.
