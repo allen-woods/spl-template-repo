@@ -94,7 +94,7 @@ This script automatically performs the following steps:
    - Push the commit using the `--set-upstream` flag.
    - Upstream automatically conforms to `init.defaultBranch`.
 
-### 👍 Next Steps
+### 🎉 Next Steps
 
 From here, you can:
 
@@ -127,7 +127,7 @@ cd <new_repo_name>
 
 ## 🔬 Sample Script Usage Message
 
-```shell
+```
 Usage:  ./init_spl_repo.sh \
         --copyright-holder="Holder's Name" \
         --project-name="Project Name" \
