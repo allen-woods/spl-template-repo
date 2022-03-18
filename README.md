@@ -66,33 +66,33 @@ GitHub does provide a short path to an official list of licenses that does not i
 This script automatically performs the following steps:
 
 1. Request root of `licenses/license-templates` from `api.github.com` via `curl`.
-   - Output `JSON` in multi-line format using `jq`.
-   - Iterate over field/value pairs using `awk`.
-   - Parse `templates` string value contained in the `path` field to locate `JSON` obect.
-   - Parse tree `https` address value contained in the `url` field.
+   - a. Output `JSON` in multi-line format using `jq`.
+   - b. Iterate over field/value pairs using `awk`.
+   - c. Parse `templates` string value contained in the `path` field to locate `JSON` obect.
+   - d. Parse tree `https` address value contained in the `url` field.
 2. Request tree given by `http` address parsed in **1a**.
-   - Same as **1a**.
-   - Same as **1b**.
-   - Parse basename values of licenses contained in the `path` fields of their `JSON` objects.
-   - Parse blob `https` address values contained in the `url` fields of license `JSON` objects.
-   - Map each given basename to its corresponding `https` address.
+   - a. Same as **1a**.
+   - b. Same as **1b**.
+   - c. Parse basename values of licenses contained in the `path` fields of their `JSON` objects.
+   - d. Parse blob `https` address values contained in the `url` fields of license `JSON` objects.
+   - e. Map each given basename to its corresponding `https` address.
 3. Iterate across mapped basenames until user requested license is found.
 4. Request blob given by corresponding `https` address.
-   - Same as **1a**.
-   - Same as **1b**.
-   - Parse and decode `base64` encoded string contained in the `content` field.
-   - Interpolate incoming arguments and `date` information into the decoded license body.
-   - Echo the license to a persisted file under a newly created `LICENSES` folder.
+   - a. Same as **1a**.
+   - b. Same as **1b**.
+   - c. Parse and decode `base64` encoded string contained in the `content` field.
+   - d. Interpolate incoming arguments and `date` information into the decoded license body.
+   - e. Echo the license to a persisted file under a newly created `LICENSES` folder.
 5. Check for the presence of an `apache` and an `mit` license.
-   - Conditionally remove any pre-existing `README.md` file, if one is found.
-   - Conditionally generate a `README.md` file containing a dual-license **License** clause.
+   - a. Conditionally remove any pre-existing `README.md` file, if one is found.
+   - b. Conditionally generate a `README.md` file containing a dual-license **License** clause.
 6. Use the `gitignore` argument's value to request a file from `raw.githubusercontent.com`.
-   - Persist the gitignore file to the root path of the repo.
+   - a. Persist the gitignore file to the root path of the repo.
 7. Process the files with `git`.
-   - Add the created files (`git add`).
-   - Commit the files with message `Initializaed repo.`.
-   - Push the commit using the `--set-upstream` flag.
-   - Upstream automatically conforms to `init.defaultBranch`.
+   - a. Add the created files (`git add`).
+   - b. Commit the files with message `Initialized repo.`
+   - c. Push the commit using the `--set-upstream` flag.
+   - d. Upstream automatically conforms to `init.defaultBranch`.
 
 ### 🎉 Next Steps
 
