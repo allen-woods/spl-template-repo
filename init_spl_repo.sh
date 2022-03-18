@@ -104,7 +104,7 @@ function generate_license () {
   done
 
   if [ -z "${copyright_holder}" ] || \
-  [ -z "${project-name}" ] || \
+  [ -z "${project_name}" ] || \
   [ -z "${licenses}" ]; then
     printf '%-8s%-2s\n' \
     "Usage:" "./init_spl_repo.sh \\" \
@@ -161,7 +161,7 @@ function generate_license () {
   fi
 
   echo "${license_template}" | \
-  sed 's|[{]\{2\}[ ]\{1\}[project]\{7\}[ ]\{1\}[}]\{2\}|'"${project-name}"'|g' | \
+  sed 's|[{]\{2\}[ ]\{1\}[project]\{7\}[ ]\{1\}[}]\{2\}|'"${project_name}"'|g' | \
   sed 's|[{]\{2\}[ ]\{1\}[year]\{4\}[ ]\{1\}[}]\{2\}|'"$( date '+%Y' )"'|g' | \
   sed 's|[{]\{2\}[ ]\{1\}[organizt]\{12\}[ ]\{1\}[}]\{2\}|'"${copyright_holder}"'|g' > LICENSES/LICENSE-"$( \
     echo "${licenses}" | \
@@ -177,14 +177,14 @@ function init_spl_readme {
     fi
 
     printf '%s\n' \
-      "## License" \
-      "" \
-      "Licensed under either of" \
-      "" \
-      "- Apache License, Version 2.0, ([LICENSE_APACHE](LICENSES/LICENSE-APACHE) or https://www.apache.org/licenses/LICENSE-2.0)" \
-      "- MIT License ([LICENSE-MIT](LICENSES/LICENSE-MIT) or https://opensource.org/licenses/MIT)" \
-      "" \
-      "at your option." > README.md
+    "## License" \
+    "" \
+    "Licensed under either of" \
+    "" \
+    "- Apache License, Version 2.0, ([LICENSE_APACHE](LICENSES/LICENSE-APACHE) or https://www.apache.org/licenses/LICENSE-2.0)" \
+    "- MIT License ([LICENSE-MIT](LICENSES/LICENSE-MIT) or https://opensource.org/licenses/MIT)" \
+    "" \
+    "at your option." > README.md
   else
     printf '%-8s%-2s\n' \
     "ERROR:" "Something went wrong while generating licenses!"
@@ -319,9 +319,9 @@ function init_spl_repo {
 
   for license in $licenses; do
     generate_license \
-    --copyright-holder="${copyright_holder}"
+    --copyright-holder="${copyright_holder}" \
     --project_name="${project_name}" \
-    --licenses="${license}" \
+    --licenses="${license}"
   done
 
   init_spl_readme
