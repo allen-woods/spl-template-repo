@@ -50,8 +50,9 @@ You will be presented with a usage message detailing how to run the script succe
 
 ```shell
 ./init_spl_repo.sh \
-  --license-type="apache,mit" \
-  --license-holder="Your Name"
+  --copyright-holder="Your Name" \
+  --project-name="Project Name" \
+  --licenses="apache,mit"
 ```
 
 ### 📖 Script Outline
@@ -114,8 +115,9 @@ gh repo create <new_repo_name> \
 cd <new_repo_name>
 
 ./init_spl_repo.sh \
-  --license-type="apache,mit" \
-  --license-holder="Your Name" \
+  --copyright-holder="Your Name" \
+  --project-name="Project Namr" \
+  --licenses="apache,mit" \
   --gitignore="rs" # Let's use Rust!
 ```
 
@@ -123,8 +125,9 @@ cd <new_repo_name>
 
 ```shell
 Usage:  ./init_spl_repo.sh \
-        --license-type="comma,separated,list" \
-        --license-holder="Holder's Name" [\]
+        --copyright-holder="Holder's Name" \
+        --project-name="Project Name" \
+        --licenses="comma,separated,list" [\]
         [--gitignore="SPL"]
 
 Available License / License Header Types:

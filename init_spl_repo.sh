@@ -1,8 +1,8 @@
 #!/bin/sh
 function generate_license () {
-  local project=
-  local license_holder=
-  local license_type=
+  local copyright_holder=
+  local project_name=
+  local licenses=
 
   # Use a boolean to track whether we are reading from the JSON object
   # that contains the field/value pair "path": "templates".
@@ -77,24 +77,24 @@ function generate_license () {
   )
 
   for arg in "$@"; do
-    if [[ ! -z "$( echo "${arg}" | grep 'project' )" ]]; then
-      project="$( \
+    if [[ ! -z "$( echo "${arg}" | grep 'project-name' )" ]]; then
+      project_name="$( \
         echo "${arg}" | \
         cut -d '=' -f 2 | \
         sed 's|[ ]\{1\}|\\&|g; s|[\\]\{2,\}||g;' \
       )"
     fi
 
-    if [[ ! -z "$( echo "${arg}" | grep 'license-holder' )" ]]; then
-      license_holder="$( \
+    if [[ ! -z "$( echo "${arg}" | grep 'copyright-holder' )" ]]; then
+      copyright_holder="$( \
         echo "${arg}" | \
         cut -d '=' -f 2 | \
         sed 's|[ ]\{1\}|\\&|g; s|[\\]\{2,\}||g;' \
       )"
     fi
 
-    if [[ ! -z "$( echo "${arg}" | grep 'license-type' )" ]]; then
-      license_type="$(
+    if [[ ! -z "$( echo "${arg}" | grep 'licenses' )" ]]; then
+      licenses="$(
         echo "${arg}" | \
         cut -d '=' -f 2 | \
         sed 's|["]\{1\}||g' | \
@@ -103,14 +103,14 @@ function generate_license () {
     fi
   done
 
-  if [ -z "${project}" ] || \
-  [ -z "${license_holder}" ] || \
-  [ -z "${license_type}" ]; then
+  if [ -z "${copyright_holder}" ] || \
+  [ -z "${project-name}" ] || \
+  [ -z "${licenses}" ]; then
     printf '%-8s%-2s\n' \
     "Usage:" "./init_spl_repo.sh \\" \
-    " " "--project=\"Project Name\" \\" \
-    " " "--license-type=\"comma,separated,list\" \\" \
-    " " "--license-holder=\"Holder's Name\" [\\]" \
+    " " "--copyright-holder=\"Holder's Name\" \\" \
+    " " "--project-name=\"Project Name\" \\" \
+    " " "--licenses=\"comma,separated,list\" [\\]" \
     " " "[--gitignore=\"SPL\"]"
 
     printf '\n%s\n\n' \
@@ -128,12 +128,12 @@ function generate_license () {
   local match_found="false"
 
   for match_license in $license_data; do
-    if [ "${match_license}" = "${license_type}" ]; then
+    if [ "${match_license}" = "${licenses}" ]; then
       [ "${match_found}" = "false" ] && match_found="true"
     fi
 
     if [ "${match_found}" = "true" ] && \
-    [ "${match_license}" != "${license_type}" ]; then
+    [ "${match_license}" != "${licenses}" ]; then
       license_template=$( \
         curl \
         --silent \
@@ -161,10 +161,10 @@ function generate_license () {
   fi
 
   echo "${license_template}" | \
-  sed 's|[{]\{2\}[ ]\{1\}[project]\{7\}[ ]\{1\}[}]\{2\}|'"${project}"'|g' | \
+  sed 's|[{]\{2\}[ ]\{1\}[project]\{7\}[ ]\{1\}[}]\{2\}|'"${project-name}"'|g' | \
   sed 's|[{]\{2\}[ ]\{1\}[year]\{4\}[ ]\{1\}[}]\{2\}|'"$( date '+%Y' )"'|g' | \
-  sed 's|[{]\{2\}[ ]\{1\}[organizt]\{12\}[ ]\{1\}[}]\{2\}|'"${license_holder}"'|g' > LICENSES/LICENSE-"$( \
-    echo "${license_type}" | \
+  sed 's|[{]\{2\}[ ]\{1\}[organizt]\{12\}[ ]\{1\}[}]\{2\}|'"${copyright_holder}"'|g' > LICENSES/LICENSE-"$( \
+    echo "${licenses}" | \
     tr '[:lower:]' '[:upper:]' \
   )"
 }
@@ -271,8 +271,8 @@ function add_commit_push_spl_repo_init {
 function init_spl_repo {
   local copyright_holder=
   local project_name=
-  local gitignore=
   local licenses=
+  local gitignore=
 
   for arg in "$@"; do
     if [[ ! -z "$( echo "${arg}" | grep 'copyright-holder' )" ]]; then
@@ -291,20 +291,20 @@ function init_spl_repo {
       )"
     fi
 
-    if [[ ! -z "$( echo "${arg}" | grep 'gitignore' )" ]]; then
-      gitignore="$( \
-        echo "${arg}" | \
-        cut -d '=' -f 2 | \
-        sed 's|["]\{1\}||g' \
-      )"
-    fi
-
     if [[ ! -z "$( echo "${arg}" | grep 'licenses' )" ]]; then
       licenses="$(
         echo "${arg}" | \
         cut -d '=' -f 2 | \
         sed 's|["]\{1\}||g' | \
         tr ',' ' ' \
+      )"
+    fi
+
+    if [[ ! -z "$( echo "${arg}" | grep 'gitignore' )" ]]; then
+      gitignore="$( \
+        echo "${arg}" | \
+        cut -d '=' -f 2 | \
+        sed 's|["]\{1\}||g' \
       )"
     fi
   done
@@ -319,9 +319,9 @@ function init_spl_repo {
 
   for license in $licenses; do
     generate_license \
-    --project="${project_name}" \
-    --license-type="${license}" \
-    --license-holder="${copyright_holder}"
+    --copyright-holder="${copyright_holder}"
+    --project_name="${project_name}" \
+    --licenses="${license}" \
   done
 
   init_spl_readme
