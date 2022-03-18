@@ -1,4 +1,7 @@
 #!/bin/sh
+
+# TODO: fully comment the source below.
+
 function generate_license () {
   local gl_ch_arg= # copyright_holder
   local gl_pn_arg= # project_name
@@ -269,14 +272,10 @@ function add_commit_push_spl_repo_init {
 }
 
 function init_spl_repo {
-  # isr_ch_arg
-  # isr_pn_arg
-  # isr_ls_arg
-  # isr_gi_arg
   local isr_ch_arg= # copyright_holder
   local isr_pn_arg= # project_name
   local isr_ls_arg= # licenses
-  local gitignore= # gitignore
+  local isr_gi_arg= # gitignore
 
   for arg in "$@"; do
     if [[ ! -z "$( echo "${arg}" | grep 'copyright-holder' )" ]]; then
@@ -305,7 +304,7 @@ function init_spl_repo {
     fi
 
     if [[ ! -z "$( echo "${arg}" | grep 'gitignore' )" ]]; then
-      gitignore="$( \
+      isr_gi_arg="$( \
         echo "${arg}" | \
         cut -d '=' -f 2 | \
         sed 's|["]\{1\}||g' \
@@ -329,8 +328,8 @@ function init_spl_repo {
   done
 
   init_spl_readme
-  if [ $? -eq 0 ] && [[ ! -z "${gitignore}" ]]; then
-    fetch_gitignore_template --gitignore="${gitignore}"
+  if [ $? -eq 0 ] && [[ ! -z "${isr_gi_arg}" ]]; then
+    fetch_gitignore_template --gitignore="${isr_gi_arg}"
   fi
   [ $? -eq 0 ] && add_commit_push_spl_repo_init
 }
