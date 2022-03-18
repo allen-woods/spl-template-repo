@@ -6,9 +6,9 @@ Currently, there is no facility for adding multiple licenses to a repository usi
 
 This repository is an example of how we can use the `--template` flag provided by `gh` in combination with shell script to achieve the desired result.
 
-You can see the resulting output of this template here:
+You can see the resulting output of this template repo here:
 
-[SPL Template Repo Sample](https://github.com/allen-woods/spl-template-repo-sample)
+👉 [SPL Template Repo Sample](https://github.com/allen-woods/spl-template-repo-sample)
 
 ## ✅ Compatible Languages
 

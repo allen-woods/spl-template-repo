@@ -1,8 +1,8 @@
 #!/bin/sh
 function generate_license () {
-  local copyright_holder=
-  local project_name=
-  local licenses=
+  local gl_ch_arg= # copyright_holder
+  local gl_pn_arg= # project_name
+  local gl_ls_arg= # licenses
 
   # Use a boolean to track whether we are reading from the JSON object
   # that contains the field/value pair "path": "templates".
@@ -77,16 +77,16 @@ function generate_license () {
   )
 
   for arg in "$@"; do
-    if [[ ! -z "$( echo "${arg}" | grep 'project-name' )" ]]; then
-      project_name="$( \
+    if [[ ! -z "$( echo "${arg}" | grep 'copyright-holder' )" ]]; then
+      gl_ch_arg="$( \
         echo "${arg}" | \
         cut -d '=' -f 2 | \
         sed 's|[ ]\{1\}|\\&|g; s|[\\]\{2,\}||g;' \
       )"
     fi
 
-    if [[ ! -z "$( echo "${arg}" | grep 'copyright-holder' )" ]]; then
-      copyright_holder="$( \
+    if [[ ! -z "$( echo "${arg}" | grep 'project-name' )" ]]; then
+      gl_pn_arg="$( \
         echo "${arg}" | \
         cut -d '=' -f 2 | \
         sed 's|[ ]\{1\}|\\&|g; s|[\\]\{2,\}||g;' \
@@ -94,7 +94,7 @@ function generate_license () {
     fi
 
     if [[ ! -z "$( echo "${arg}" | grep 'licenses' )" ]]; then
-      licenses="$(
+      gl_ls_arg="$(
         echo "${arg}" | \
         cut -d '=' -f 2 | \
         sed 's|["]\{1\}||g' | \
@@ -103,9 +103,9 @@ function generate_license () {
     fi
   done
 
-  if [ -z "${copyright_holder}" ] || \
-  [ -z "${project_name}" ] || \
-  [ -z "${licenses}" ]; then
+  if [ -z "${gl_ch_arg}" ] || \
+  [ -z "${gl_pn_arg}" ] || \
+  [ -z "${gl_ls_arg}" ]; then
     printf '%-8s%-2s\n' \
     "Usage:" "./init_spl_repo.sh \\" \
     " " "--copyright-holder=\"Holder's Name\" \\" \
@@ -128,12 +128,12 @@ function generate_license () {
   local match_found="false"
 
   for match_license in $license_data; do
-    if [ "${match_license}" = "${licenses}" ]; then
+    if [ "${match_license}" = "${gl_ls_arg}" ]; then
       [ "${match_found}" = "false" ] && match_found="true"
     fi
 
     if [ "${match_found}" = "true" ] && \
-    [ "${match_license}" != "${licenses}" ]; then
+    [ "${match_license}" != "${gl_ls_arg}" ]; then
       license_template=$( \
         curl \
         --silent \
@@ -161,10 +161,10 @@ function generate_license () {
   fi
 
   echo "${license_template}" | \
-  sed 's|[{]\{2\}[ ]\{1\}[project]\{7\}[ ]\{1\}[}]\{2\}|'"${project_name}"'|g' | \
+  sed 's|[{]\{2\}[ ]\{1\}[project]\{7\}[ ]\{1\}[}]\{2\}|'"${gl_pn_arg}"'|g' | \
   sed 's|[{]\{2\}[ ]\{1\}[year]\{4\}[ ]\{1\}[}]\{2\}|'"$( date '+%Y' )"'|g' | \
-  sed 's|[{]\{2\}[ ]\{1\}[organizt]\{12\}[ ]\{1\}[}]\{2\}|'"${copyright_holder}"'|g' > LICENSES/LICENSE-"$( \
-    echo "${licenses}" | \
+  sed 's|[{]\{2\}[ ]\{1\}[organizt]\{12\}[ ]\{1\}[}]\{2\}|'"${gl_ch_arg}"'|g' > LICENSES/LICENSE-"$( \
+    echo "${gl_ls_arg}" | \
     tr '[:lower:]' '[:upper:]' \
   )"
 }
@@ -193,12 +193,12 @@ function init_spl_readme {
 }
 
 function fetch_gitignore_template {
-  local gitignore_type=
+  local fgit_git_arg=
   local spl=
 
   for arg in "$@"; do
     if [[ ! -z "$( echo "${arg}" | grep 'gitignore' )" ]]; then
-      gitignore_type="$(
+      fgit_git_arg="$(
         echo "${arg}" | \
         cut -d '=' -f 2 | \
         sed 's|["]\{1\}||g' \
@@ -206,7 +206,7 @@ function fetch_gitignore_template {
     fi
   done
 
-  case $( echo "${gitignore_type}" | tr '[:upper:]' '[:lower:]' ) in
+  case $( echo "${fgit_git_arg}" | tr '[:upper:]' '[:lower:]' ) in
     ada)
       spl="Ada"
       ;;
@@ -269,14 +269,18 @@ function add_commit_push_spl_repo_init {
 }
 
 function init_spl_repo {
-  local copyright_holder=
-  local project_name=
-  local licenses=
-  local gitignore=
+  # isr_ch_arg
+  # isr_pn_arg
+  # isr_ls_arg
+  # isr_gi_arg
+  local isr_ch_arg= # copyright_holder
+  local isr_pn_arg= # project_name
+  local isr_ls_arg= # licenses
+  local gitignore= # gitignore
 
   for arg in "$@"; do
     if [[ ! -z "$( echo "${arg}" | grep 'copyright-holder' )" ]]; then
-      copyright_holder="$( \
+      isr_ch_arg="$( \
         echo "${arg}" | \
         cut -d '=' -f 2 | \
         sed 's|[ ]\{1\}|\\&|g;' \
@@ -284,7 +288,7 @@ function init_spl_repo {
     fi
 
     if [[ ! -z "$( echo "${arg}" | grep 'project-name' )" ]]; then
-      project_name="$( \
+      isr_pn_arg="$( \
         echo "${arg}" | \
         cut -d '=' -f 2 | \
         sed 's|[ ]\{1\}|\\&|g;' \
@@ -292,7 +296,7 @@ function init_spl_repo {
     fi
 
     if [[ ! -z "$( echo "${arg}" | grep 'licenses' )" ]]; then
-      licenses="$(
+      isr_ls_arg="$(
         echo "${arg}" | \
         cut -d '=' -f 2 | \
         sed 's|["]\{1\}||g' | \
@@ -309,18 +313,18 @@ function init_spl_repo {
     fi
   done
 
-  if [ -z "${copyright_holder}" ] || \
-  [ -z "${project_name}" ] || \
-  [ -z "${licenses}" ]; then
+  if [ -z "${isr_ch_arg}" ] || \
+  [ -z "${isr_pn_arg}" ] || \
+  [ -z "${isr_ls_arg}" ]; then
     # Show error message (no args passed).
     generate_license
     return 0
   fi
 
-  for license in $licenses; do
+  for license in $isr_ls_arg; do
     generate_license \
-    --copyright-holder="${copyright_holder}" \
-    --project_name="${project_name}" \
+    --copyright-holder="${isr_ch_arg}" \
+    --project-name="${isr_pn_arg}" \
     --licenses="${license}"
   done
 
